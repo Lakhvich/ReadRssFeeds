@@ -1,0 +1,24 @@
+﻿@model ReadRssFeeds.WebUI.Models.FeedsRSSList
+
+@{
+    ViewBag.Title = "Reading RSS feeds";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Новостная лента</h2>
+
+<form method="get">
+    @Html.Partial("_form")
+</form>
+
+<table class="table">
+    <tr>
+        <th>Источник</th>
+        <th>Название новости</th>
+        <th>Описнаие новости</th>
+        <th>Дата публикации</th>
+    </tr>
+    <tbody id="results">
+        @Html.Partial("_item", Model.feedsRss)
+    </tbody>
+</table>
