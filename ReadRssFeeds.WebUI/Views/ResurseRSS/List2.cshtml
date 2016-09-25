@@ -1,0 +1,30 @@
+﻿@using System.Web.Optimization
+@model ReadRssFeeds.WebUI.Models.FeedsRSSList
+
+@{
+    ViewBag.Title = "Ajax";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryajax")
+}
+
+<h2>Новостная лента</h2>
+
+@using (Ajax.BeginForm("List2", "ResurseRSS", new AjaxOptions { UpdateTargetId = "results" }))
+{
+    @Html.Partial("_form")
+}
+
+<table class="table">
+    <tr>
+        <th>Источник</th>
+        <th>Название новости</th>
+        <th>Описнаие новости</th>
+        <th>Дата публикации</th>
+    </tr>
+    <tbody id="results">
+        @Html.Partial("_item", Model.feedsRss)
+    </tbody>
+</table>

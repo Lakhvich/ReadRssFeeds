@@ -1,0 +1,10 @@
+﻿<label class="control-label">Источник ленты </label>
+@Html.DropDownList("id", Model.resurseRSS as SelectList,
+                htmlAttributes: new { @class = "form-control" }) <br />
+
+@Html.RadioButton("sort", "date", true)
+<span>Сортировать по дате</span> <br />
+@Html.RadioButton("sort", "resurse")
+<span>Сортировать по источнику</span> <br />
+
+<input type="submit" value="Просмотреть" />

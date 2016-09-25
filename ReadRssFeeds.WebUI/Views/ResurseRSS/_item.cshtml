@@ -1,0 +1,17 @@
+﻿@model IEnumerable<ReadRssFeeds.DataProvider.Entities.ResurseRSS>
+
+@if (Model.FirstOrDefault() != null)
+{
+    foreach (var rss in Model)
+    {
+        foreach (var item in rss.NewsItems)
+        {
+            <tr>
+                <td>@Html.DisplayFor(model => rss.Name)</td>
+                <td>@Html.DisplayFor(model => item.Title)</td>
+                <td>@Html.DisplayFor(model => item.Description)</td>
+                <td>@Html.DisplayFor(model => item.PublicDate)</td>
+            </tr>
+        }
+    }
+}
