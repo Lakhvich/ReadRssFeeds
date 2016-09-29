@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("ReadRssFeeds.Domain")]
+[assembly: AssemblyTitle("ReadRssFeeds.DataProvider")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ReadRssFeeds.Domain")]
+[assembly: AssemblyProduct("ReadRssFeeds.DataProvider")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("d0c9a20b-7685-4905-a5ab-a14aee9c90f3")]
+[assembly: Guid("28f5cf93-173f-4c45-8df2-d4baed19c778")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
