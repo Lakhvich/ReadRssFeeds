@@ -18,16 +18,15 @@ namespace ReadRssFeeds.WebUI.Controllers
             this.repository = itemRepository;
         }
 
-        public ActionResult List(int? id, string sort = "resurse")
+        public ActionResult List(int? id, string sort)
         {
-            var feedRssList = (id != null && id != 0) ?
-                (sort.Equals("date") ? repository.GetResourceRSSAndRelationshipItemsByIdOrderByDes(id)
-                : repository.GetResourceRSSAndRelationshipItemsById(id))
-                : repository.GetResourceRSSAndRelationshipItems();
-            if (feedRssList == null)
-            {
-                return HttpNotFound();
-            }
+            List<NewsItem> feedRssList = repository.GetItemsAll().OrderByDescending(w => w.PublicDate).ToList();
+
+            if (id != null && id != 0)
+                feedRssList = feedRssList.Where(w => w.ResurseRSSId == id).ToList();
+
+            if (!String.IsNullOrEmpty(sort) && sort.Equals("resurse"))
+                feedRssList = feedRssList.OrderByDescending(w => w.ResurseRSSId).ToList();
 
             List<ResurseRSS> res = repository.GetResourceRSS;
             res.Insert(0, new ResurseRSS { Name = "Все", Id = 0 });
@@ -42,15 +41,13 @@ namespace ReadRssFeeds.WebUI.Controllers
 
         public ActionResult List2(int? id, string sort = "resurse")
         {
-            var feedRssList = (id != null && id != 0) ?
-                (sort.Equals("date") ? repository.GetResourceRSSAndRelationshipItemsByIdOrderByDes(id)
-                : repository.GetResourceRSSAndRelationshipItemsById(id))
-                : repository.GetResourceRSSAndRelationshipItems();
+            List<NewsItem> feedRssList = repository.GetItemsAll().OrderByDescending(w => w.PublicDate).ToList();
 
-            if (feedRssList == null)
-            {
-                return HttpNotFound();
-            }
+            if (id != null && id != 0)
+                feedRssList = feedRssList.Where(w => w.ResurseRSSId == id).ToList();
+
+            if (!String.IsNullOrEmpty(sort) && sort.Equals("resurse"))
+                feedRssList = feedRssList.OrderByDescending(w => w.ResurseRSSId).ToList();
 
             if (Request.IsAjaxRequest())
                 return PartialView("_item", feedRssList);

@@ -9,7 +9,7 @@ namespace ReadRssFeeds.WebUI.Models
 {
     public class FeedsRSSList
     {
-        public IEnumerable<ResurseRSS> feedsRss { get; set; }
+        public IEnumerable<NewsItem> feedsRss { get; set; }
         public SelectList resurseRSS { get; set; }
     }
 }

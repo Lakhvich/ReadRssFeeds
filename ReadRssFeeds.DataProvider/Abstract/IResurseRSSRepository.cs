@@ -10,9 +10,7 @@ namespace ReadRssFeeds.DataProvider.Abstract
     public interface IResurseRSSRepository
     {
         List<ResurseRSS> GetResourceRSS { get; }
-        List<ResurseRSS> GetResourceRSSAndRelationshipItems();
-        List<ResurseRSS> GetResourceRSSAndRelationshipItemsById(int? id);
-        List<ResurseRSS> GetResourceRSSAndRelationshipItemsByIdOrderByDes(int? rssId);
+        List<NewsItem> GetItemsAll();
         int InsertNewsItems(List<NewsItem> newItemsList);
     }
 }

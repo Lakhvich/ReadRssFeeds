@@ -13,51 +13,28 @@ namespace ReadRssFeeds.DataProvider.Concrete
     {
         private EFDbContext db = new EFDbContext(Properties.Settings.Default.EFDbContextConnectionString);
 
-        public List<ResurseRSS> GetResourceRSSAndRelationshipItems()
+        public List<NewsItem> GetItemsAll()
         {
-            var query = (from rss in db.ResurseRSSes
-                         from item in db.NewsItems
-                         where item.ResurseRSSId == rss.Id
-                         select new
-                         {
-                             Id = rss.Id,
-                             Name = rss.Name,
-                             UrlRss = rss.Url,
-                             NewsItems = rss.NewsItems,
-                             Title = item.Title,
-                             Description = item.Description,
-                             PublicDate = item.PublicDate,
-                             UrlArticle = item.Url,
-                             ResurseRSSId = item.ResurseRSSId
-                         });
+            var query = from item in db.NewsItems
+                        from rss in db.ResurseRSSes
+                        where item.ResurseRSSId == rss.Id
+                        select new { item, rss };
 
-            var queryGroup = from rss in query
-                             group rss by rss.Id into newGroup
-                             orderby newGroup.Key
-                             select newGroup;
-
-            List<ResurseRSS> RssFeeds = new List<ResurseRSS>();
-            foreach (var nameGroup in queryGroup)
+            return query.AsEnumerable().Select(a => new NewsItem
             {
-                var items = (from el in nameGroup
-                             select new NewsItem
-                             {
-                                 Title = el.Title,
-                                 PublicDate = el.PublicDate,
-                                 Url = el.UrlArticle,
-                                 Description = el.Description
-                             }).ToList();
-
-                var rss = new ResurseRSS
+                Id = a.item.Id,
+                Title = a.item.Title,
+                PublicDate = a.item.PublicDate,
+                Url = a.item.Url,
+                Description = a.item.Description,
+                ResurseRSSId = a.item.ResurseRSSId,
+                ResurseRSS = new ResurseRSS
                 {
-                    Id = nameGroup.First().Id,
-                    Name = nameGroup.First().Name,
-                    Url = nameGroup.First().UrlRss,
-                    NewsItems = items
-                };
-                RssFeeds.Add(rss);
-            }
-            return RssFeeds;
+                    Id = a.rss.Id,
+                    Name = a.rss.Name,
+                    Url = a.rss.Url
+                }
+            }).ToList();
         }
 
         public List<ResurseRSS> GetResourceRSS
@@ -65,107 +42,16 @@ namespace ReadRssFeeds.DataProvider.Concrete
             get
             {
                 var query = from rss in db.ResurseRSSes
-                            select new
-                            {
-                                Id = rss.Id,
-                                Name = rss.Name,
-                                Url = rss.Url
-                            };
+                            select rss;
 
                 return query.AsEnumerable().Select(a => new ResurseRSS
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    Url = a.Url
+                    Url = a.Url,
+                    NewsItems = a.NewsItems
                 }).ToList();
             }
-        }
-
-        public List<ResurseRSS> GetResourceRSSAndRelationshipItemsById(int? rssId)
-        {
-            var quew = from rss in db.ResurseRSSes
-                       from item in db.NewsItems
-                       where item.ResurseRSSId == rssId && rss.Id == rssId
-                       select new
-                       {
-                           Id = rss.Id,
-                           Name = rss.Name,
-                           UrlRss = rss.Url,
-                           NewsItems = rss.NewsItems,
-                           Title = item.Title,
-                           Description = item.Description,
-                           PublicDate = item.PublicDate,
-                           UrlArticle = item.Url,
-                           ResurseRSSId = item.ResurseRSSId
-                       };
-
-            if (quew.FirstOrDefault() != null)
-            {
-                var items = (from el in quew.AsEnumerable()
-                             select new NewsItem
-                             {
-                                 Title = el.Title,
-                                 PublicDate = el.PublicDate,
-                                 Url = el.UrlArticle,
-                                 Description = el.Description
-                             }).ToList();
-
-                return (new List<ResurseRSS>
-                {
-                    new ResurseRSS
-                    {
-                        Id = quew.First().Id,
-                        Name = quew.First().Name,
-                        Url = quew.First().UrlRss,
-                        NewsItems = items
-                    }
-                });
-            }
-            return null;
-        }
-
-        public List<ResurseRSS> GetResourceRSSAndRelationshipItemsByIdOrderByDes(int? rssId)
-        {
-            var quew = from rss in db.ResurseRSSes
-                       from item in db.NewsItems
-                       where item.ResurseRSSId == rssId && rss.Id == rssId
-                       orderby item.PublicDate descending
-                       select new
-                       {
-                           Id = rss.Id,
-                           Name = rss.Name,
-                           UrlRss = rss.Url,
-                           NewsItems = rss.NewsItems,
-                           Title = item.Title,
-                           Description = item.Description,
-                           PublicDate = item.PublicDate,
-                           UrlArticle = item.Url,
-                           ResurseRSSId = item.ResurseRSSId
-                       };
-
-            if (quew.FirstOrDefault() != null)
-            {
-                var items = (from el in quew.AsEnumerable()
-                             select new NewsItem
-                             {
-                                 Title = el.Title,
-                                 PublicDate = el.PublicDate,
-                                 Url = el.UrlArticle,
-                                 Description = el.Description
-                             }).ToList();
-
-                return (new List<ResurseRSS>
-                {
-                    new ResurseRSS
-                    {
-                        Id = quew.First().Id,
-                        Name = quew.First().Name,
-                        Url = quew.First().UrlRss,
-                        NewsItems = items
-                    }
-                });
-            }
-            return null;
         }
 
         public int InsertNewsItems(List<NewsItem> newItemsList)
